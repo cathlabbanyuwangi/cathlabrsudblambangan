@@ -6,7 +6,7 @@
                 <th class="px-6 py-5">Kontak & Alamat</th>
                 <th class="px-6 py-5">Asal & Jaminan</th>
                 
-                {{-- Kolom Estimasi Panggilan (Hanya muncul di tab Belum Dipanggil) --}}
+                {{-- Kolom Estimasi Panggilan --}}
                 @if(!isset($activeTab) || $activeTab == 'belum_dipanggil')
                     <th class="px-6 py-5 text-indigo-600 bg-indigo-50/50">⏳ Estimasi Panggilan</th>
                 @endif
@@ -57,18 +57,29 @@
                     <div class="text-[10px] text-slate-400 font-bold mt-1.5 uppercase">{{ $patient->source }}</div>
                 </td>
 
-                {{-- ISI ESTIMASI PANGGILAN (1 - 1,5 Bulan setelah Tanggal Daftar) --}}
+                {{-- LOGIKA ESTIMASI PANGGILAN + CEK APAKAH LEWAT TANGGAL (OVERDUE) --}}
                 @if(!isset($activeTab) || $activeTab == 'belum_dipanggil')
-                    <td class="px-6 py-5 bg-indigo-50/20">
-                        @php
-                            $daftarDate = $patient->created_at ?? now();
-                            $minEst = \Carbon\Carbon::parse($daftarDate)->addDays(30)->translatedFormat('d M Y');
-                            $maxEst = \Carbon\Carbon::parse($daftarDate)->addDays(45)->translatedFormat('d M Y');
-                        @endphp
-                        <div class="font-extrabold text-indigo-900 text-xs">
-                            {{ $minEst }} - {{ $maxEst }}
+                    @php
+                        $daftarDate = $patient->created_at ?? now();
+                        $minEst = \Carbon\Carbon::parse($daftarDate)->addDays(30);
+                        $maxEst = \Carbon\Carbon::parse($daftarDate)->addDays(45);
+                        
+                        // Cek apakah tanggal hari ini sudah melewati batas maksimal estimasi (45 hari)
+                        $isOverdue = now()->isAfter($maxEst);
+                    @endphp
+
+                    <td class="px-6 py-5 {{ $isOverdue ? 'bg-rose-50/70 border-l-4 border-rose-500' : 'bg-indigo-50/20' }}">
+                        <div class="font-extrabold {{ $isOverdue ? 'text-rose-900' : 'text-indigo-900' }} text-xs">
+                            {{ $minEst->translatedFormat('d M Y') }} - {{ $maxEst->translatedFormat('d M Y') }}
                         </div>
-                        <span class="text-[9px] text-indigo-500 font-bold uppercase tracking-wider mt-0.5 block">Perkiraan Tanggal di Jadwalkan</span>
+                        
+                        @if($isOverdue)
+                            <span class="inline-flex items-center gap-1 mt-1 px-2 py-0.5 bg-rose-600 text-white text-[9px] font-black rounded-md uppercase tracking-wider animate-pulse shadow-xs">
+                                🚨 Lewat Estimasi
+                            </span>
+                        @else
+                            <span class="text-[9px] text-indigo-500 font-bold uppercase tracking-wider mt-0.5 block">+1 s.d. 1,5 Bulan</span>
+                        @endif
                     </td>
                 @endif
                 
@@ -105,7 +116,7 @@
                     @endif
                 </td>
                 
-                <!-- KONTROL AKSI (TOMBOL CLAYMORPHISM) -->
+                <!-- KONTROL AKSI -->
                 <td class="px-6 py-5 text-right space-x-1.5 whitespace-nowrap">
                     @if($patient->status == 'pending')
                         <button type="button" onclick="openCallModal('{{ $patient->id }}', '{{ addslashes($patient->name) }}')" class="px-3.5 py-2 bg-amber-500 text-white text-[10px] font-black rounded-xl uppercase hover:bg-amber-600 shadow-[0_4px_12px_rgba(245,158,11,0.3)] transition-all cursor-pointer">Panggil</button>
