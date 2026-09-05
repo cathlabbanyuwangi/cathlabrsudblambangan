@@ -58,7 +58,6 @@
                             {{-- HIGHLIGHT PINDAH KE NOMOR RM --}}
                             <div class="text-[10px] text-slate-500 font-medium tracking-wide flex items-center gap-2 flex-wrap">
                                 <span class="bg-indigo-50/50 px-2 py-0.5 rounded-md border border-indigo-100 whitespace-nowrap">RM: <b class="text-indigo-700">{{ $patient->medical_record_number }}</b></span>
-                                <span>•</span>
                                 <span class="whitespace-nowrap">Tiket: <b class="text-slate-700">{{ $patient->ticket_number ?? '-' }}</b></span>
                             </div>
                         </div>
