@@ -5,7 +5,7 @@
                 QR Code Portal Pendaftaran
             </h2>
             <span class="text-xs font-semibold text-[#457B9D] bg-white/80 px-3.5 py-1.5 rounded-full shadow-xs border border-[#E2ECF5]">
-                RSUD Blambangan
+                Cathlab Banyuwangi
             </span>
         </div>
     </x-slot>
