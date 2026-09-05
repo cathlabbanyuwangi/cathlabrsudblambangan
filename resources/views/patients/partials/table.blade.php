@@ -68,7 +68,7 @@
                         <div class="font-extrabold text-indigo-900 text-xs">
                             {{ $minEst }} - {{ $maxEst }}
                         </div>
-                        <span class="text-[9px] text-indigo-500 font-bold uppercase tracking-wider mt-0.5 block">+1 s.d. 1,5 Bulan</span>
+                        <span class="text-[9px] text-indigo-500 font-bold uppercase tracking-wider mt-0.5 block">Perkiraan Tanggal di Jadwalkan</span>
                     </td>
                 @endif
                 
