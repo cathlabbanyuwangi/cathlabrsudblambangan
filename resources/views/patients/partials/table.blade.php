@@ -54,18 +54,19 @@
                                     </span>
                                 @endif
                             </div>
+                            
+                            {{-- HIGHLIGHT PINDAH KE NOMOR RM --}}
                             <div class="text-[10px] text-slate-500 font-medium tracking-wide flex items-center gap-2 flex-wrap">
-                                <span class="bg-slate-100 px-2 py-0.5 rounded-md border border-slate-200/60 whitespace-nowrap">Tiket: <b class="text-indigo-600">{{ $patient->ticket_number ?? '-' }}</b></span>
+                                <span class="bg-indigo-50/50 px-2 py-0.5 rounded-md border border-indigo-100 whitespace-nowrap">RM: <b class="text-indigo-700">{{ $patient->medical_record_number }}</b></span>
                                 <span>•</span>
-                                <span class="whitespace-nowrap">RM: <b class="text-slate-700">{{ $patient->medical_record_number }}</b></span>
+                                <span class="whitespace-nowrap">Tiket: <b class="text-slate-700">{{ $patient->ticket_number ?? '-' }}</b></span>
                             </div>
                         </div>
                     </div>
                 </td>
 
-                <!-- KOLOM 2: KONTAK & ALAMAT (Diperbaiki agar Wrap kebawah) -->
+                <!-- KOLOM 2: KONTAK & ALAMAT -->
                 <td class="px-5 py-4 align-top">
-                    <!-- Batas lebar diterapkan di inner div agar membungkus rapi ke bawah -->
                     <div class="flex flex-col gap-1 w-[200px] lg:w-[240px]">
                         <div class="text-xs font-bold text-slate-800">{{ $patient->patient_phone ?? '-' }}</div>
                         <div class="text-[10px] text-slate-500 leading-relaxed whitespace-normal break-words">{{ $patient->address }}, {{ $patient->district }}</div>
@@ -154,7 +155,7 @@
                     </div>
                 </td>
                 
-                <!-- KOLOM 6: KONTROL AKSI (Diperbaiki w-nya agar tombol rapi) -->
+                <!-- KOLOM 6: KONTROL AKSI -->
                 <td class="px-5 py-4 align-top text-right">
                     <div class="flex flex-col lg:flex-row items-end lg:items-center justify-end gap-2 w-[110px] lg:w-auto ml-auto">
                         @if($patient->status == 'pending')
@@ -209,7 +210,7 @@
     </table>
 </div>
 
-<!-- Script JS (TIDAK ADA YANG DIRUBAH/DIHILANGKAN DARI SCRIPT SEBELUMNYA) -->
+<!-- Script JS (TIDAK ADA PERUBAHAN) -->
 <script>
     function openCallModal(patientId, patientName) {
         let userOptions = `<option value="">-- Pilih User --</option>`;
