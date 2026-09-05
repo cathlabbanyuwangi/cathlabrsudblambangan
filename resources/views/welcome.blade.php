@@ -164,17 +164,6 @@
                 <p class="text-base sm:text-lg text-pastel-muted max-w-xl font-light leading-relaxed">
                     Instalasi intervensi modern RSUD Blambangan Banyuwangi memadukan teknologi presisi tinggi untuk penanganan komprehensif penyakit jantung, gangguan saraf/otak (neuro), serta radiologi diagnostik lanjutan.
                 </p>
-                <div class="flex flex-col sm:flex-row gap-4 pt-2">
-                    <a href="#cek-jadwal" class="bg-pastel-blue-accent hover:bg-pastel-blue-dark text-white text-center px-6 py-3.5 rounded-2xl font-bold text-sm transition-all shadow-md">
-                        Cek Perkiraan Jadwal Antrean
-                    </a>
-                    <div class="flex flex-col sm:flex-row gap-4 pt-2">
-                        <a href="#cek-jadwal"
-                         class="bg-pastel-blue-accent hover:bg-pastel-blue-dark text-white text-center px-6 py-3.5 rounded-2xl font-bold text-sm transition-all shadow-md">
-                        Cek Jadwal Antrean
-                        </a>
-                    </div>
-                </div>
             </div>
 
             <div class="lg:col-span-5">
