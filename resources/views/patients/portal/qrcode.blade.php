@@ -20,7 +20,7 @@
 
             <div class="relative z-10 space-y-2">
                 <span class="inline-block px-3.5 py-1 bg-[#F0F5FA] text-[#457B9D] font-extrabold text-[10px] rounded-full uppercase tracking-widest border border-[#E2ECF5] shadow-2xs">
-                    RSUD Blambangan
+                    CATHLAB BANYUWANGI
                 </span>
                 <h3 class="font-serif text-2xl font-bold text-[#1D3557] tracking-tight">QR Code Portal Pendaftaran</h3>
                 <p class="text-xs text-slate-500 font-light max-w-xs mx-auto leading-relaxed">
