@@ -19,7 +19,6 @@ use App\Http\Controllers\QueueCheckController;
 use App\Http\Controllers\PublicRegistrationController; 
 use App\Http\Controllers\CheckBhpController;
 use App\Http\Controllers\DicomController;
-use App\Http\Controllers\PatientPortalController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -40,39 +39,7 @@ Route::middleware(['throttle:3,1'])->group(function () {
     Route::post('/daftar-mandiri', [PublicRegistrationController::class, 'store'])->name('public.register.store');
 });
 
-/*
-|--------------------------------------------------------------------------
-| PORTAL PENDAFTARAN PUBLIK (AKSES VIA LINK TANPA LOGIN)
-|--------------------------------------------------------------------------
-*/
-Route::get('/portal-pasien/daftar-pasien', [PublicRegistrationController::class, 'portalDaftar'])
-    ->name('public-registrations.portal-daftar');
 
-/*
-|--------------------------------------------------------------------------
-| PORTAL MANDIRI PASIEN (DOWNLOAD DOKUMEN MEDIS AMAN BERBASIS TOKEN)
-|--------------------------------------------------------------------------
-*/
-
-Route::prefix('portal-pasien')->name('patient.portal.')->group(function () {
-    Route::get('/', [PatientPortalController::class, 'showForm'])->name('login');
-    Route::post('/auth', [PatientPortalController::class, 'authenticate'])->name('auth');
-    
-    Route::get('/akses/{token}', [PatientPortalController::class, 'loginWithToken'])->name('token-login');
-
-    Route::get('/dokumen-saya', [PatientPortalController::class, 'documentsList'])->name('documents');
-    Route::post('/download-pilihan', [PatientPortalController::class, 'downloadSelected'])->name('download');
-    
-    Route::get('/download-secure/{patientDocument}', [PatientPortalController::class, 'downloadSecure'])
-        ->name('secure-download')
-        ->middleware('signed');
-
-    Route::get('/preview/{patientDocument}', [PatientPortalController::class, 'securePreview'])
-        ->name('secure-preview')
-        ->middleware('signed');
-
-    Route::post('/logout', [PatientPortalController::class, 'logout'])->name('logout');
-});
 
 // Dashboard dilindungi permission 'akses-dashboard'
 Route::get('/dashboard', [DashboardController::class, 'index'])

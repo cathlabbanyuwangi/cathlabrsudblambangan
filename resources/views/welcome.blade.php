@@ -142,9 +142,10 @@
                         </a>
                     @endauth
                 @endif
-                <button @click="openRegisterModal = true" class="bg-pastel-blue-accent hover:bg-pastel-blue-dark text-white px-5 py-2.5 rounded-full text-xs font-bold transition-all shadow-sm">
-                    Daftar Mandiri
-                </button>
+                <a href="#cek-jadwal"
+                    class="bg-pastel-blue-accent hover:bg-pastel-blue-dark text-white px-5 py-2.5 rounded-full text-xs font-bold transition-all shadow-sm">
+                    Cek Jadwal Antrean
+                </a>
             </div>
         </div>
     </header>
@@ -167,9 +168,12 @@
                     <a href="#cek-jadwal" class="bg-pastel-blue-accent hover:bg-pastel-blue-dark text-white text-center px-6 py-3.5 rounded-2xl font-bold text-sm transition-all shadow-md">
                         Cek Perkiraan Jadwal Antrean
                     </a>
-                    <button @click="openRegisterModal = true" class="bg-white hover:bg-pastel-blue-light text-pastel-blue-dark text-center px-6 py-3.5 rounded-2xl font-bold text-sm transition-all border border-pastel-blue-accent/30 shadow-xs">
-                        Pendaftaran Pasien Cathlab
-                    </button>
+                    <div class="flex flex-col sm:flex-row gap-4 pt-2">
+                        <a href="#cek-jadwal"
+                         class="bg-pastel-blue-accent hover:bg-pastel-blue-dark text-white text-center px-6 py-3.5 rounded-2xl font-bold text-sm transition-all shadow-md">
+                        Cek Jadwal Antrean
+                        </a>
+                    </div>
                 </div>
             </div>
 
@@ -237,11 +241,7 @@
                         Cek Perkiraan Jadwal Sekarang
                     </button>
                 </form>
-                <div class="text-center pt-2">
-                    <button @click="openRegisterModal = true" class="text-xs font-bold text-pastel-blue-accent hover:text-pastel-blue-dark underline transition-colors">
-                        Belum punya jadwal? Klik di sini untuk mengajukan pendaftaran jadwal mandiri &rarr;
-                    </button>
-                </div>
+ 
             </div>
         </div>
     </section>
