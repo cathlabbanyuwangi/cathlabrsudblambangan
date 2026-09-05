@@ -2,31 +2,30 @@
     <table class="w-full text-left border-collapse">
         <thead class="bg-slate-50/80 text-slate-400 uppercase text-[10px] font-black tracking-widest border-b border-slate-100 rounded-2xl">
             <tr>
-                <th class="px-6 py-5 rounded-l-2xl">Pasien & Rekam Medis</th>
-                <th class="px-6 py-5">Kontak & Alamat</th>
-                <th class="px-6 py-5">Asal & Jaminan</th>
+                <th class="px-5 py-4 rounded-l-2xl whitespace-nowrap">Pasien & Rekam Medis</th>
+                <th class="px-5 py-4">Kontak & Alamat</th>
+                <th class="px-5 py-4 whitespace-nowrap">Asal & Jaminan</th>
                 
                 {{-- Kolom Estimasi Panggilan --}}
                 @if(!isset($activeTab) || $activeTab == 'belum_dipanggil')
-                    <th class="px-6 py-5 text-indigo-600 bg-indigo-50/50">⏳ Estimasi Panggilan</th>
+                    <th class="px-5 py-4 text-indigo-600 bg-indigo-50/50 whitespace-nowrap">⏳ Estimasi Panggilan</th>
                 @endif
 
-                <th class="px-6 py-5">Status & Jadwal</th>
-                <th class="px-6 py-5 text-right rounded-r-2xl">Kontrol</th>
+                <th class="px-5 py-4 whitespace-nowrap">Status & Jadwal</th>
+                <th class="px-5 py-4 text-right rounded-r-2xl whitespace-nowrap">Kontrol</th>
             </tr>
         </thead>
         <tbody class="divide-y divide-slate-100/80 text-sm">
             @forelse($patients as $patient)
             <tr class="hover:bg-indigo-50/30 transition-all group relative">
                 
-                <!-- KOLOM 1: NAMA PASIEN & REKAM MEDIS (TANGGAL KALENDER DI KIRI) -->
-                <td class="px-6 py-5 align-middle">
-                    <div class="flex items-start gap-4">
-                        
-                        {{-- TANGGAL DAFTAR (Desain Kalender Modern di Kiri) --}}
+                <!-- KOLOM 1: NAMA PASIEN & REKAM MEDIS -->
+                <td class="px-5 py-4 align-top">
+                    <div class="flex items-start gap-4 min-w-[260px]">
+                        {{-- TANGGAL DAFTAR --}}
                         @if(!isset($activeTab) || $activeTab == 'belum_dipanggil')
                             <div class="shrink-0 mt-0.5">
-                                <div class="flex flex-col items-center justify-center px-3 py-1.5 bg-white border border-slate-200 rounded-xl shadow-sm min-w-[64px]">
+                                <div class="flex flex-col items-center justify-center px-3 py-1.5 bg-white border border-slate-200 rounded-xl shadow-sm min-w-[56px]">
                                     <span class="text-[8px] font-extrabold text-slate-400 uppercase tracking-widest mb-0.5">Daftar</span>
                                     <span class="text-sm font-black text-slate-800 leading-none mb-1">{{ \Carbon\Carbon::parse($patient->created_at ?? now())->format('d') }}</span>
                                     <span class="text-[9px] font-bold text-slate-500 leading-none">{{ \Carbon\Carbon::parse($patient->created_at ?? now())->format('M Y') }}</span>
@@ -35,11 +34,10 @@
                         @endif
 
                         {{-- INFO PASIEN --}}
-                        <div class="flex flex-col gap-1.5">
+                        <div class="flex flex-col gap-1.5 w-full">
                             <div class="flex items-center gap-2.5 flex-wrap">
-                                <a href="{{ route('patients.show', $patient->id) }}" class="font-black text-slate-900 text-sm hover:text-indigo-600 transition-colors inline-flex items-center gap-1.5 group-hover:no-underline">
+                                <a href="{{ route('patients.show', $patient->id) }}" class="font-black text-slate-900 text-sm hover:text-indigo-600 transition-colors inline-flex items-center gap-1.5 group-hover:no-underline break-words">
                                     {{ $patient->name }}
-                                    
                                     @if($patient->gender === 'P')
                                         <svg class="w-3.5 h-3.5 text-pink-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 11a4 4 0 100-8 4 4 0 000 8zm0 2v7m-3-3h6"/>
@@ -50,7 +48,6 @@
                                         </svg>
                                     @endif
                                 </a>
-                                
                                 @if($patient->is_priority && $patient->status !== 'pernah_tindakan')
                                     <span class="px-2 py-1 bg-rose-50 text-rose-600 border border-rose-200 text-[9px] font-black rounded-md uppercase tracking-wider animate-pulse shadow-xs">
                                         🚨 Prioritas
@@ -58,38 +55,37 @@
                                 @endif
                             </div>
                             <div class="text-[10px] text-slate-500 font-medium tracking-wide flex items-center gap-2 flex-wrap">
-                                <span class="bg-slate-100 px-2 py-0.5 rounded-md border border-slate-200/60">Tiket: <b class="text-indigo-600">{{ $patient->ticket_number ?? '-' }}</b></span>
+                                <span class="bg-slate-100 px-2 py-0.5 rounded-md border border-slate-200/60 whitespace-nowrap">Tiket: <b class="text-indigo-600">{{ $patient->ticket_number ?? '-' }}</b></span>
                                 <span>•</span>
-                                <span>RM: <b class="text-slate-700">{{ $patient->medical_record_number }}</b></span>
-                                <span>•</span>
-                                <span>{{ $patient->gender }}</span>
+                                <span class="whitespace-nowrap">RM: <b class="text-slate-700">{{ $patient->medical_record_number }}</b></span>
                             </div>
                         </div>
                     </div>
                 </td>
 
-                <!-- KOLOM 2: KONTAK & ALAMAT -->
-                <td class="px-6 py-5 align-middle">
-                    <div class="flex flex-col gap-1.5">
+                <!-- KOLOM 2: KONTAK & ALAMAT (Diperbaiki agar Wrap kebawah) -->
+                <td class="px-5 py-4 align-top">
+                    <!-- Batas lebar diterapkan di inner div agar membungkus rapi ke bawah -->
+                    <div class="flex flex-col gap-1 w-[200px] lg:w-[240px]">
                         <div class="text-xs font-bold text-slate-800">{{ $patient->patient_phone ?? '-' }}</div>
-                        <div class="text-[10px] text-slate-500 max-w-[160px] leading-relaxed truncate">{{ $patient->address }}, {{ $patient->district }}</div>
+                        <div class="text-[10px] text-slate-500 leading-relaxed whitespace-normal break-words">{{ $patient->address }}, {{ $patient->district }}</div>
                     </div>
                 </td>
                 
                 <!-- KOLOM 3: ASAL & JAMINAN -->
-                <td class="px-6 py-5 align-middle">
-                    <div class="flex flex-col items-start gap-2">
-                        <span class="px-2.5 py-1 bg-white text-slate-700 text-[10px] font-extrabold rounded-md uppercase border border-slate-200 shadow-sm">
+                <td class="px-5 py-4 align-top">
+                    <div class="flex flex-col items-start gap-2 min-w-[100px]">
+                        <span class="px-2.5 py-1 bg-white text-slate-700 text-[10px] font-extrabold rounded-md uppercase border border-slate-200 shadow-sm whitespace-nowrap">
                             {{ $patient->insurance->name ?? 'Umum' }}
                         </span>
-                        <div class="text-[9px] text-slate-400 font-bold uppercase tracking-widest flex items-center gap-1">
+                        <div class="text-[9px] text-slate-400 font-bold uppercase tracking-widest flex items-center gap-1 whitespace-nowrap">
                             <svg class="w-3 h-3 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
                             {{ $patient->source }}
                         </div>
                     </div>
                 </td>
 
-                <!-- KOLOM 4: ESTIMASI PANGGILAN + CEK OVERDUE -->
+                <!-- KOLOM 4: ESTIMASI PANGGILAN -->
                 @if(!isset($activeTab) || $activeTab == 'belum_dipanggil')
                     @php
                         $daftarDate = $patient->created_at ?? now();
@@ -98,19 +94,18 @@
                         $isOverdue = now()->isAfter($maxEst);
                     @endphp
 
-                    <td class="px-6 py-5 align-middle relative {{ $isOverdue ? 'bg-rose-50/40' : 'bg-indigo-50/20' }}">
-                        {{-- Indikator garis merah jika overdue --}}
+                    <td class="px-5 py-4 align-top relative {{ $isOverdue ? 'bg-rose-50/40' : 'bg-indigo-50/20' }}">
                         @if($isOverdue)
                             <div class="absolute left-0 top-0 bottom-0 w-1 bg-rose-500 rounded-r-md"></div>
                         @endif
                         
-                        <div class="flex flex-col gap-1.5">
+                        <div class="flex flex-col gap-1.5 min-w-[140px]">
                             <div class="font-extrabold {{ $isOverdue ? 'text-rose-700' : 'text-indigo-800' }} text-xs whitespace-nowrap">
-                                {{ $minEst->translatedFormat('d M Y') }} <span class="text-slate-400 font-normal mx-0.5">s/d</span> {{ $maxEst->translatedFormat('d M Y') }}
+                                {{ $minEst->translatedFormat('d M') }} - {{ $maxEst->translatedFormat('d M Y') }}
                             </div>
                             
                             @if($isOverdue)
-                                <span class="inline-flex items-center gap-1.5 px-2 py-1 bg-rose-100 border border-rose-200 text-rose-700 text-[9px] font-black rounded uppercase tracking-widest shadow-sm w-fit">
+                                <span class="inline-flex items-center gap-1.5 px-2 py-1 bg-rose-100 border border-rose-200 text-rose-700 text-[9px] font-black rounded uppercase tracking-widest shadow-sm w-fit whitespace-nowrap">
                                     <span class="relative flex h-2 w-2">
                                       <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-rose-400 opacity-75"></span>
                                       <span class="relative inline-flex rounded-full h-2 w-2 bg-rose-500"></span>
@@ -118,86 +113,81 @@
                                     Lewat Estimasi
                                 </span>
                             @else
-                                <span class="text-[9px] text-slate-500 font-semibold tracking-wide">Jadwal Perkiraan Sistem</span>
+                                <span class="text-[9px] text-slate-500 font-semibold tracking-wide whitespace-nowrap">Jadwal Perkiraan</span>
                             @endif
                         </div>
                     </td>
                 @endif
                 
                 <!-- KOLOM 5: STATUS DISPLAY -->
-                <td class="px-6 py-5 align-middle">
-                    <div class="flex flex-col items-start gap-1.5">
+                <td class="px-5 py-4 align-top">
+                    <div class="flex flex-col items-start gap-1.5 min-w-[120px]">
                         @if($patient->status == 'pending')
-                            <span class="px-3 py-1 bg-amber-50 text-amber-700 text-[9px] font-black rounded-full border border-amber-200/80 shadow-sm uppercase tracking-wider">Belum Dipanggil</span>
+                            <span class="px-3 py-1 bg-amber-50 text-amber-700 text-[9px] font-black rounded-full border border-amber-200/80 shadow-sm uppercase tracking-wider whitespace-nowrap">Belum Dipanggil</span>
                         
                         @elseif($patient->status == 'bersedia')
-                            <span class="px-3 py-1 bg-emerald-50 text-emerald-700 text-[9px] font-black rounded-full border border-emerald-200/80 shadow-sm uppercase tracking-wider">Bersedia</span>
-                            <div class="text-[10px] font-bold text-slate-600 bg-slate-50 px-2 py-0.5 rounded border border-slate-100 flex items-center gap-1.5">
+                            <span class="px-3 py-1 bg-emerald-50 text-emerald-700 text-[9px] font-black rounded-full border border-emerald-200/80 shadow-sm uppercase tracking-wider whitespace-nowrap">Bersedia</span>
+                            <div class="text-[10px] font-bold text-slate-600 bg-slate-50 px-2 py-0.5 rounded border border-slate-100 flex items-center gap-1.5 whitespace-nowrap">
                                 📅 {{ $patient->scheduled_at ? \Carbon\Carbon::parse($patient->scheduled_at)->format('d M Y, H:i') : '-' }}
                             </div>
                             @if($patient->caller)
-                                <div class="text-[9px] text-indigo-500 font-medium tracking-wide">
+                                <div class="text-[9px] text-indigo-500 font-medium tracking-wide whitespace-nowrap">
                                     Oleh: <b class="text-indigo-600">{{ $patient->caller->name }}</b>
                                 </div>
                             @endif
                             
                         @elseif($patient->status == 'pernah_tindakan')
-                            <span class="px-3 py-1 bg-indigo-50 text-indigo-700 text-[9px] font-black rounded-full border border-indigo-200/80 shadow-sm uppercase tracking-wider">Selesai</span>
+                            <span class="px-3 py-1 bg-indigo-50 text-indigo-700 text-[9px] font-black rounded-full border border-indigo-200/80 shadow-sm uppercase tracking-wider whitespace-nowrap">Selesai</span>
                             @if($patient->action_date)
-                                <div class="text-[10px] font-bold text-slate-600 bg-slate-50 px-2 py-0.5 rounded border border-slate-100 flex items-center gap-1">
+                                <div class="text-[10px] font-bold text-slate-600 bg-slate-50 px-2 py-0.5 rounded border border-slate-100 flex items-center gap-1 whitespace-nowrap">
                                     <svg class="w-3 h-3 text-indigo-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                                     {{ \Carbon\Carbon::parse($patient->action_date)->format('d M Y') }}
                                 </div>
                             @endif
                             
                         @else
-                            <span class="px-3 py-1 bg-rose-50 text-rose-700 text-[9px] font-black rounded-full border border-rose-200/80 shadow-sm uppercase tracking-wider">Menolak</span>
+                            <span class="px-3 py-1 bg-rose-50 text-rose-700 text-[9px] font-black rounded-full border border-rose-200/80 shadow-sm uppercase tracking-wider whitespace-nowrap">Menolak</span>
                             <div class="text-[10px] text-slate-500 italic max-w-[140px] truncate bg-slate-50 px-2 py-1 rounded border border-slate-100" title="{{ $patient->unwillingness_reason }}">
                                 "{{ $patient->unwillingness_reason ?? '-' }}"
                             </div>
-                            @if($patient->caller)
-                                <div class="text-[9px] text-indigo-500 font-medium tracking-wide">
-                                    Oleh: <b class="text-indigo-600">{{ $patient->caller->name }}</b>
-                                </div>
-                            @endif
                         @endif
                     </div>
                 </td>
                 
-                <!-- KOLOM 6: KONTROL AKSI (FLEX WRAP UNTUK MENCEGAH BERTUMPUK BERANTAKAN) -->
-                <td class="px-6 py-5 align-middle text-right">
-                    <div class="flex items-center justify-end gap-2 flex-wrap min-w-[180px]">
+                <!-- KOLOM 6: KONTROL AKSI (Diperbaiki w-nya agar tombol rapi) -->
+                <td class="px-5 py-4 align-top text-right">
+                    <div class="flex flex-col lg:flex-row items-end lg:items-center justify-end gap-2 w-[110px] lg:w-auto ml-auto">
                         @if($patient->status == 'pending')
-                            <button type="button" onclick="openCallModal('{{ $patient->id }}', '{{ addslashes($patient->name) }}')" class="px-4 py-2 bg-amber-500 text-white text-[10px] font-extrabold rounded-xl uppercase hover:bg-amber-600 shadow-md shadow-amber-500/20 transition-all cursor-pointer">
+                            <button type="button" onclick="openCallModal('{{ $patient->id }}', '{{ addslashes($patient->name) }}')" class="w-full lg:w-auto px-4 py-2 bg-amber-500 text-white text-[10px] font-extrabold rounded-xl uppercase hover:bg-amber-600 shadow-md shadow-amber-500/20 transition-all cursor-pointer whitespace-nowrap">
                                 Panggil
                             </button>
                         
                         @elseif($patient->status == 'bersedia')
-                            <a href="{{ route('patients.actions.create', $patient->id) }}" class="px-4 py-2 bg-indigo-600 text-white text-[10px] font-extrabold rounded-xl hover:bg-indigo-700 uppercase shadow-md shadow-indigo-600/20 transition-all">
+                            <a href="{{ route('patients.actions.create', $patient->id) }}" class="w-full lg:w-auto px-4 py-2 bg-indigo-600 text-white text-[10px] font-extrabold rounded-xl hover:bg-indigo-700 uppercase shadow-md shadow-indigo-600/20 transition-all text-center whitespace-nowrap">
                                 + Tindakan
                             </a>
-                            <button type="button" onclick="openCallModal('{{ $patient->id }}', '{{ addslashes($patient->name) }}')" class="px-3 py-2 bg-white text-slate-700 text-[10px] font-extrabold rounded-xl hover:bg-slate-50 uppercase cursor-pointer border border-slate-200 shadow-sm transition-all">
+                            <button type="button" onclick="openCallModal('{{ $patient->id }}', '{{ addslashes($patient->name) }}')" class="w-full lg:w-auto px-3 py-2 bg-white text-slate-700 text-[10px] font-extrabold rounded-xl hover:bg-slate-50 uppercase cursor-pointer border border-slate-200 shadow-sm transition-all whitespace-nowrap">
                                 Reschedule
                             </button>
                         
                         @elseif($patient->status == 'pernah_tindakan')
-                            <form action="{{ route('patients.reregister', $patient->id) }}" method="POST" class="inline-block reregister-form-{{ $patient->id }} m-0">
+                            <form action="{{ route('patients.reregister', $patient->id) }}" method="POST" class="w-full lg:w-auto inline-block reregister-form-{{ $patient->id }} m-0">
                                 @csrf
                                 <input type="hidden" name="is_priority" id="input-is-priority-{{ $patient->id }}" value="0">
-                                <button type="button" onclick="confirmReregister('{{ $patient->id }}', '{{ addslashes($patient->name) }}')" class="px-4 py-2 bg-emerald-600 text-white text-[10px] font-extrabold rounded-xl hover:bg-emerald-700 uppercase shadow-md shadow-emerald-600/20 transition-all cursor-pointer">
+                                <button type="button" onclick="confirmReregister('{{ $patient->id }}', '{{ addslashes($patient->name) }}')" class="w-full px-4 py-2 bg-emerald-600 text-white text-[10px] font-extrabold rounded-xl hover:bg-emerald-700 uppercase shadow-md shadow-emerald-600/20 transition-all cursor-pointer whitespace-nowrap">
                                     Daftar Ulang
                                 </button>
                             </form>
                         
                         @else
-                            <button type="button" onclick="openCallModal('{{ $patient->id }}', '{{ addslashes($patient->name) }}')" class="px-4 py-2 bg-amber-500 text-white text-[10px] font-extrabold rounded-xl hover:bg-amber-600 uppercase shadow-md shadow-amber-500/20 transition-all cursor-pointer">
+                            <button type="button" onclick="openCallModal('{{ $patient->id }}', '{{ addslashes($patient->name) }}')" class="w-full lg:w-auto px-4 py-2 bg-amber-500 text-white text-[10px] font-extrabold rounded-xl hover:bg-amber-600 uppercase shadow-md shadow-amber-500/20 transition-all cursor-pointer whitespace-nowrap">
                                 Panggil Ulang
                             </button>
                         @endif
                         
                         <form action="{{ route('patients.destroy', $patient->id) }}" method="POST" class="inline-block delete-patient-form m-0">
                             @csrf @method('DELETE')
-                            <button type="button" onclick="confirmDeletePatient(this)" class="p-2 bg-white text-rose-500 hover:text-rose-700 hover:bg-rose-50 rounded-xl cursor-pointer border border-slate-200 shadow-sm transition-all" title="Hapus Pasien">
+                            <button type="button" onclick="confirmDeletePatient(this)" class="w-full lg:w-auto p-2 bg-white text-rose-500 hover:text-rose-700 hover:bg-rose-50 rounded-xl cursor-pointer border border-slate-200 shadow-sm transition-all flex justify-center" title="Hapus Pasien">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
                             </button>
                         </form>
@@ -219,7 +209,7 @@
     </table>
 </div>
 
-<!-- Script Modal Panggil Interaktif -->
+<!-- Script JS (TIDAK ADA YANG DIRUBAH/DIHILANGKAN DARI SCRIPT SEBELUMNYA) -->
 <script>
     function openCallModal(patientId, patientName) {
         let userOptions = `<option value="">-- Pilih User --</option>`;
