@@ -19,9 +19,15 @@
             @forelse($patients as $patient)
             <tr class="hover:bg-indigo-50/30 transition-all group">
                 
-                <!-- KOLOM NAMA PASIEN BISA DIKLIK + BADGE PRIORITAS -->
+                <!-- KOLOM NAMA PASIEN (DENGAN TANGGAL DI SEBELAH KIRI KHUSUS TAB BELUM DIPANGGIL) -->
                 <td class="px-6 py-5">
-                    <div class="flex items-center space-x-2">
+                    <div class="flex items-center space-x-2.5">
+                        @if(!isset($activeTab) || $activeTab == 'belum_dipanggil')
+                            <span class="px-2.5 py-1 bg-slate-100 text-slate-600 rounded-lg text-[10px] font-extrabold uppercase tracking-wider shrink-0 border border-slate-200/60">
+                                📅 {{ \Carbon\Carbon::parse($patient->created_at ?? now())->format('d M Y') }}
+                            </span>
+                        @endif
+
                         <a href="{{ route('patients.show', $patient->id) }}" class="font-black text-slate-900 text-sm hover:text-indigo-600 transition-colors inline-flex items-center gap-1.5 group-hover:no-underline">
                             {{ $patient->name }}
                             
@@ -42,7 +48,7 @@
                             </span>
                         @endif
                     </div>
-                    <div class="text-[10px] text-slate-400 font-bold tracking-wide mt-0.5">
+                    <div class="text-[10px] text-slate-400 font-bold tracking-wide mt-1">
                         Tiket: <span class="text-indigo-600 font-black">{{ $patient->ticket_number ?? '-' }}</span> • RM: {{ $patient->medical_record_number }} • {{ $patient->gender }}
                     </div>
                 </td>
@@ -57,14 +63,12 @@
                     <div class="text-[10px] text-slate-400 font-bold mt-1.5 uppercase">{{ $patient->source }}</div>
                 </td>
 
-                {{-- LOGIKA ESTIMASI PANGGILAN + CEK APAKAH LEWAT TANGGAL (OVERDUE) --}}
+                {{-- ESTIMASI PANGGILAN + CEK OVERDUE --}}
                 @if(!isset($activeTab) || $activeTab == 'belum_dipanggil')
                     @php
                         $daftarDate = $patient->created_at ?? now();
                         $minEst = \Carbon\Carbon::parse($daftarDate)->addDays(30);
                         $maxEst = \Carbon\Carbon::parse($daftarDate)->addDays(45);
-                        
-                        // Cek apakah tanggal hari ini sudah melewati batas maksimal estimasi (45 hari)
                         $isOverdue = now()->isAfter($maxEst);
                     @endphp
 
@@ -78,7 +82,7 @@
                                 🚨 Lewat Estimasi
                             </span>
                         @else
-                            <span class="text-[9px] text-indigo-500 font-bold uppercase tracking-wider mt-0.5 block">+1 s.d. 1,5 Bulan</span>
+                            <span class="text-[9px] text-indigo-500 font-bold uppercase tracking-wider mt-0.5 block">Estimasi Tanggal Penjadwalan</span>
                         @endif
                     </td>
                 @endif
