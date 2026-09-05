@@ -5,6 +5,12 @@
                 <th class="px-6 py-5 rounded-l-2xl">Pasien & Rekam Medis</th>
                 <th class="px-6 py-5">Kontak & Alamat</th>
                 <th class="px-6 py-5">Asal & Jaminan</th>
+                
+                {{-- Kolom Estimasi Panggilan (Hanya muncul di tab Belum Dipanggil) --}}
+                @if(!isset($activeTab) || $activeTab == 'belum_dipanggil')
+                    <th class="px-6 py-5 text-indigo-600 bg-indigo-50/50">⏳ Estimasi Panggilan</th>
+                @endif
+
                 <th class="px-6 py-5">Status & Jadwal</th>
                 <th class="px-6 py-5 text-right rounded-r-2xl">Kontrol</th>
             </tr>
@@ -13,29 +19,29 @@
             @forelse($patients as $patient)
             <tr class="hover:bg-indigo-50/30 transition-all group">
                 
-                <!-- KOLOM NAMA PASIEN BISA DIKLIK + BADGE PRIORITAS (Tanpa Garis Bawah) -->
+                <!-- KOLOM NAMA PASIEN BISA DIKLIK + BADGE PRIORITAS -->
                 <td class="px-6 py-5">
-                    <d<div class="flex items-center space-x-2">
-    <a href="{{ route('patients.show', $patient->id) }}" class="font-black text-slate-900 text-sm hover:text-indigo-600 transition-colors inline-flex items-center gap-1.5 group-hover:no-underline">
-        {{ $patient->name }}
-        
-        @if($patient->gender === 'P')
-            <svg class="w-3.5 h-3.5 text-pink-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 11a4 4 0 100-8 4 4 0 000 8zm0 2v7m-3-3h6"/>
-            </svg>
-        @else
-            <svg class="w-3.5 h-3.5 text-sky-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l5 5m0 0l-5 5m5-5H10a5 5 0 100 10"/>
-            </svg>
-        @endif
-    </a>
-    
-    @if($patient->is_priority && $patient->status !== 'pernah_tindakan')
-        <span class="px-2 py-0.5 bg-rose-600 text-white text-[9px] font-black rounded-md uppercase tracking-wider animate-pulse shadow-xs">
-            PRIORITAS
-        </span>
-    @endif
-</div>
+                    <div class="flex items-center space-x-2">
+                        <a href="{{ route('patients.show', $patient->id) }}" class="font-black text-slate-900 text-sm hover:text-indigo-600 transition-colors inline-flex items-center gap-1.5 group-hover:no-underline">
+                            {{ $patient->name }}
+                            
+                            @if($patient->gender === 'P')
+                                <svg class="w-3.5 h-3.5 text-pink-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 11a4 4 0 100-8 4 4 0 000 8zm0 2v7m-3-3h6"/>
+                                </svg>
+                            @else
+                                <svg class="w-3.5 h-3.5 text-sky-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l5 5m0 0l-5 5m5-5H10a5 5 0 100 10"/>
+                                </svg>
+                            @endif
+                        </a>
+                        
+                        @if($patient->is_priority && $patient->status !== 'pernah_tindakan')
+                            <span class="px-2 py-0.5 bg-rose-600 text-white text-[9px] font-black rounded-md uppercase tracking-wider animate-pulse shadow-xs">
+                                PRIORITAS
+                            </span>
+                        @endif
+                    </div>
                     <div class="text-[10px] text-slate-400 font-bold tracking-wide mt-0.5">
                         Tiket: <span class="text-indigo-600 font-black">{{ $patient->ticket_number ?? '-' }}</span> • RM: {{ $patient->medical_record_number }} • {{ $patient->gender }}
                     </div>
@@ -50,6 +56,21 @@
                     <span class="px-2.5 py-1 bg-slate-100/80 text-slate-700 text-[10px] font-black rounded-lg uppercase border border-slate-200/50 shadow-2xs">{{ $patient->insurance->name ?? 'Umum' }}</span>
                     <div class="text-[10px] text-slate-400 font-bold mt-1.5 uppercase">{{ $patient->source }}</div>
                 </td>
+
+                {{-- ISI ESTIMASI PANGGILAN (1 - 1,5 Bulan setelah Tanggal Daftar) --}}
+                @if(!isset($activeTab) || $activeTab == 'belum_dipanggil')
+                    <td class="px-6 py-5 bg-indigo-50/20">
+                        @php
+                            $daftarDate = $patient->created_at ?? now();
+                            $minEst = \Carbon\Carbon::parse($daftarDate)->addDays(30)->translatedFormat('d M Y');
+                            $maxEst = \Carbon\Carbon::parse($daftarDate)->addDays(45)->translatedFormat('d M Y');
+                        @endphp
+                        <div class="font-extrabold text-indigo-900 text-xs">
+                            {{ $minEst }} - {{ $maxEst }}
+                        </div>
+                        <span class="text-[9px] text-indigo-500 font-bold uppercase tracking-wider mt-0.5 block">+1 s.d. 1,5 Bulan</span>
+                    </td>
+                @endif
                 
                 <!-- STATUS DISPLAY -->
                 <td class="px-6 py-5">
@@ -112,7 +133,7 @@
             </tr>
             @empty
             <tr>
-                <td colspan="5" class="px-6 py-16 text-center text-slate-400 font-medium">Tidak ada data pasien yang ditemukan.</td>
+                <td colspan="{{ (!isset($activeTab) || $activeTab == 'belum_dipanggil') ? 6 : 5 }}" class="px-6 py-16 text-center text-slate-400 font-medium">Tidak ada data pasien yang ditemukan.</td>
             </tr>
             @endforelse
         </tbody>
