@@ -27,12 +27,9 @@ class ReportSelectionController extends Controller
         $selectedActions = $request->input('actions', []);
 
         $query = DB::table('action_records')
-            ->distinct() // Mencegah data duplikat/dobel
             ->leftJoin('patients', 'action_records.patient_id', '=', 'patients.id')
             ->leftJoin('actions', 'action_records.action_id', '=', 'actions.id')
             ->leftJoin('insurances', 'patients.insurance_id', '=', 'insurances.id') 
-            // Hubungkan langsung ke tabel users/doctors melalui doctor_id
-            ->leftJoin('users as doctors', 'action_records.doctor_id', '=', 'doctors.id') 
             ->select(
                 'action_records.action_date',
                 'action_records.created_at',
@@ -42,8 +39,7 @@ class ReportSelectionController extends Controller
                 'patients.date_of_birth',
                 'insurances.name as insurance_name',
                 'action_records.conclusion as diagnosis', 
-                'actions.name as action_name',
-                'doctors.name as doctor_name' // Mengambil nama dokter yang bersangkutan saja
+                'actions.name as action_name'
             );
 
         if ($startMonth) {
