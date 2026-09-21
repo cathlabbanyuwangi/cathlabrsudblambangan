@@ -31,6 +31,7 @@ class CustomCathlabReportExport implements FromCollection, WithHeadings, WithMap
             'Jenis Kelamin',
             'Tanggal Lahir',
             'Penjamin',
+            'Dokter Pemeriksa',
             'Diagnosa',
             'Tindakan'
         ];
@@ -53,6 +54,7 @@ class CustomCathlabReportExport implements FromCollection, WithHeadings, WithMap
             $row->gender ?? '-',
             $dob,
             $row->insurance_name ?? '-',
+            $row->doctor_name ?? '-',
             trim($diagnosis),
             $row->action_name ?? '-'
         ];
