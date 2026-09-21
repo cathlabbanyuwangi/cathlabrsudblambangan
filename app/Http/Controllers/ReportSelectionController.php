@@ -30,6 +30,8 @@ class ReportSelectionController extends Controller
             ->leftJoin('patients', 'action_records.patient_id', '=', 'patients.id')
             ->leftJoin('actions', 'action_records.action_id', '=', 'actions.id')
             ->leftJoin('insurances', 'patients.insurance_id', '=', 'insurances.id') 
+            // Join ke tabel doctors menggunakan doctor_id
+            ->leftJoin('doctors', 'action_records.doctor_id', '=', 'doctors.id') 
             ->select(
                 'action_records.action_date',
                 'action_records.created_at',
@@ -40,7 +42,7 @@ class ReportSelectionController extends Controller
                 'insurances.name as insurance_name',
                 'action_records.conclusion as diagnosis', 
                 'actions.name as action_name',
-                'action_records.NAMA_KOLOM_ASLI_DI_DATABASE as doctor_name' // <-- Ganti 'NAMA_KOLOM_ASLI_DI_DATABASE' dengan nama kolom dokter yang ada di tabel action_records Anda
+                'doctors.name as doctor_name' // <-- PERHATIKAN: Jika di tabel doctors kolom namanya bukan 'name', ubah (misal: 'doctors.nama as doctor_name')
             );
 
         if ($startMonth) {
