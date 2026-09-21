@@ -46,9 +46,9 @@
         }
         .table-data th, .table-data td {
             border: 1px solid #000;
-            padding: 5px 6px;
+            padding: 6px 8px;
             text-align: left;
-            font-size: 9.5px;
+            font-size: 10px;
         }
         .table-data th {
             background-color: #e2e8f0 !important;
@@ -98,17 +98,16 @@
         </ul>
     </div>
 
-    <!-- Tabel Hasil Laporan dengan Tambahan Kolom Dokter Yang Mengerjakan -->
+    <!-- Tabel Hasil Laporan dengan Tambahan Kolom Tanggal Lahir -->
     <table class="table-data">
         <thead>
             <tr>
-                <th width="5%">No</th>
-                <th width="15%">Tanggal / Waktu</th>
-                <th width="20%">Nama Pasien</th>
-                <th width="14%">No. Rekam Medis</th>
-                <th width="13%">Tanggal Lahir</th>
-                <th width="18%">Dokter Pemeriksa</th>
-                <th width="15%">Status</th>
+                <th width="6%">No</th>
+                <th width="18%">Tanggal / Waktu</th>
+                <th width="26%">Nama Pasien</th>
+                <th width="16%">No. Rekam Medis</th>
+                <th width="16%">Tanggal Lahir</th>
+                <th width="18%">Status</th>
             </tr>
         </thead>
         <tbody>
@@ -121,12 +120,11 @@
                 <td style="text-align: center;">
                     {{ optional($row->patient)->date_of_birth ? \Carbon\Carbon::parse($row->patient->date_of_birth)->format('d-m-Y') : '-' }}
                 </td>
-                <td>{{ $row->doctor->name ?? $row->doctor_name ?? '-' }}</td>
                 <td>{{ $row->status ?? '-' }}</td>
             </tr>
             @empty
             <tr>
-                <td colspan="7" style="text-align: center; font-style: italic; color: #555;">
+                <td colspan="6" style="text-align: center; font-style: italic; color: #555;">
                     Tidak ada data yang ditemukan sesuai filter yang dipilih.
                 </td>
             </tr>

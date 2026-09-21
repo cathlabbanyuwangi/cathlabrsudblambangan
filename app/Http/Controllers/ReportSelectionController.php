@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Models\ActionCategory;
 use App\Models\Action;
+use App\Models\User; // <-- Pastikan model User/Doctor di-import jika diperlukan
 use Carbon\Carbon;
 use App\Exports\CustomCathlabReportExport;
 use Maatwebsite\Excel\Facades\Excel;
@@ -16,6 +17,9 @@ class ReportSelectionController extends Controller
     {
         $categories = ActionCategory::all();
         $actions = Action::all();
+        // Jika Anda ingin mengirim data dokter juga ke halaman view form filter (opsional):
+        // $doctors = User::where('role', 'doctor')->get(); 
+
         return view('reports.selection.index', compact('categories', 'actions'));
     }
 
@@ -30,16 +34,19 @@ class ReportSelectionController extends Controller
             ->leftJoin('patients', 'action_records.patient_id', '=', 'patients.id')
             ->leftJoin('actions', 'action_records.action_id', '=', 'actions.id')
             ->leftJoin('insurances', 'patients.insurance_id', '=', 'insurances.id') 
+            // Tambahkan leftJoin ke tabel users / doctors (sesuaikan nama tabel Anda, misal 'users' atau 'doctors')
+            ->leftJoin('users as doctors', 'action_records.doctor_id', '=', 'doctors.id') 
             ->select(
                 'action_records.action_date',
                 'action_records.created_at',
                 'patients.medical_record_number',
                 'patients.name as patient_name',
                 'patients.gender',
-                'patients.date_of_birth', // <-- Ditambahkan di sini agar tanggal lahir ikut terambil
+                'patients.date_of_birth',
                 'insurances.name as insurance_name',
                 'action_records.conclusion as diagnosis', 
-                'actions.name as action_name'
+                'actions.name as action_name',
+                'doctors.name as doctor_name' // <-- Mengambil nama dokter dari tabel relasi
             );
 
         if ($startMonth) {
