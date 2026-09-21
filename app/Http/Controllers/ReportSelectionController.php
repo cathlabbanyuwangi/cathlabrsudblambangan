@@ -40,7 +40,7 @@ class ReportSelectionController extends Controller
                 'insurances.name as insurance_name',
                 'action_records.conclusion as diagnosis', 
                 'actions.name as action_name',
-                'action_records.doctor_name' // <-- Sesuaikan dengan nama kolom asli di tabel action_records jika namanya berbeda (misal: 'doctor', 'nama_dokter', dll)
+                'action_records.NAMA_KOLOM_ASLI_DI_DATABASE as doctor_name' // <-- Ganti 'NAMA_KOLOM_ASLI_DI_DATABASE' dengan nama kolom dokter yang ada di tabel action_records Anda
             );
 
         if ($startMonth) {
