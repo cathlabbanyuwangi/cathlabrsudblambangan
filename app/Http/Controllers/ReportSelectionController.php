@@ -27,16 +27,12 @@ class ReportSelectionController extends Controller
         $selectedActions = $request->input('actions', []);
 
         $query = DB::table('action_records')
+            ->distinct() // Mencegah data duplikat/dobel
             ->leftJoin('patients', 'action_records.patient_id', '=', 'patients.id')
             ->leftJoin('actions', 'action_records.action_id', '=', 'actions.id')
             ->leftJoin('insurances', 'patients.insurance_id', '=', 'insurances.id') 
-            // Ubah join agar hanya mengambil user yang memiliki peran sebagai dokter 
-            // atau pastikan kolom relasi menunjuk ke tabel user dengan role/filter dokter, 
-            // atau jika ada tabel khusus dokter, arahkan ke tabel tersebut.
-            ->leftJoin('users as doctors', function($join) {
-                $join->on('action_records.doctor_id', '=', 'doctors.id')
-                     ->where('doctors.role', '=', 'doctor'); // Sesuaikan kriteria filter role dokter jika ada
-            })
+            // Hubungkan langsung ke tabel users/doctors melalui doctor_id
+            ->leftJoin('users as doctors', 'action_records.doctor_id', '=', 'doctors.id') 
             ->select(
                 'action_records.action_date',
                 'action_records.created_at',
@@ -47,7 +43,7 @@ class ReportSelectionController extends Controller
                 'insurances.name as insurance_name',
                 'action_records.conclusion as diagnosis', 
                 'actions.name as action_name',
-                'doctors.name as doctor_name'
+                'doctors.name as doctor_name' // Mengambil nama dokter yang bersangkutan saja
             );
 
         if ($startMonth) {
